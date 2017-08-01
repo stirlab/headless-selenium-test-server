@@ -1,0 +1,12 @@
+[Unit]
+Description=VNC server for X11
+Requires=display-manager.service
+After=display-manager.service
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/x11vnc -forever -bg -o /var/log/x11vnc.log -auth guess -rfbauth /etc/x11vnc/passwd -rfbport 5900 -xkb -noxrecord -noxfixes -noxdamage -shared -norc
+
+[Install]
+WantedBy=multi-user.target
+

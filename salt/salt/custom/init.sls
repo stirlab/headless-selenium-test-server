@@ -1,0 +1,4 @@
+include:
+  - .alerts
+  - .media
+  - .tests

@@ -1,0 +1,7 @@
+*.DS_Store
+*~
+*.swp
+*.swo
+
+salt/pillar/server/private.sls
+

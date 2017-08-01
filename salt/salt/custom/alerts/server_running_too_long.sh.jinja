@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Quick hack to allow alerting if a video server is up too long.
+
+FROM="noreply@stirlab.net"
+
+API_KEY="{{ sendgrid_api_key }}"
+WAIT_TIME="{{ alert_running_too_long_timeout }}"
+
+SUBJECT="Server alert"
+MESSAGE="Server $(hostname) running more than ${WAIT_TIME}"
+
+send_emails() {
+{% for email in server_alert_emails %}
+  /usr/bin/curl --request POST \
+    --url https://api.sendgrid.com/v3/mail/send \
+    --header "Authorization: Bearer ${API_KEY}" \
+    --header "Content-Type: application/json" \
+    --data "{\"personalizations\": [{\"to\": [{\"email\": \"{{ email }}\"}]}],\"from\": {\"email\": \"${FROM}\"},\"subject\": \"${SUBJECT}\",\"content\": [{\"type\": \"text/plain\", \"value\": \"${MESSAGE}\"}]}"
+{% endfor %}
+}
+
+sleep ${WAIT_TIME} && send_emails && logger "[SERVER EMAIL ALERT] ${MESSAGE}"
+
+exit 0
+
+# vi: ft=sh
+

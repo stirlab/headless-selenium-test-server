@@ -1,0 +1,18 @@
+# Example pillar file for private settings on a server.
+#
+# The default values are found in salt/salt/vars.jinja, and can be overridden
+# here.
+#
+# Copy this file to private.sls on the Salt master server, and adjust as
+# necessary.
+#
+# For more details on how to write pillar files, see:
+# http://docs.saltstack.com/en/latest/topics/pillar
+
+server:
+  alerts:
+    sendgrid:
+      api_key: ""
+    emails:
+      - foo@example.com
+      - bar@example.com

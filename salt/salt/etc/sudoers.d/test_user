@@ -1,0 +1,4 @@
+# Allow test user to run all tc commands as root.
+Defaults:test !requiretty
+test ALL=(ALL) NOPASSWD: /sbin/ip link *, /sbin/modprobe ifb *, /sbin/tc class *, /sbin/tc filter *, /sbin/tc qdisc *
+

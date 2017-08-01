@@ -1,0 +1,20 @@
+[Unit]
+Description=BrowserMob Proxy server
+Requires=display-manager.service
+After=display-manager.service
+
+[Service]
+ExecStart=/usr/local/browsermob-proxy-{{ browsermob_proxy_version }}/bin/browsermob-proxy -port {{ browsermob_proxy_port }}
+SuccessExitStatus=143
+Restart=always
+RestartSec=10
+WorkingDirectory=/home/test
+SyslogIdentifier=browsermob-proxy
+User=test
+Group=test
+
+[Install]
+WantedBy=multi-user.target
+
+# vi: ft=dosini
+

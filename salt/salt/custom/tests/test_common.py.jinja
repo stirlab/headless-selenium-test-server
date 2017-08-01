@@ -1,0 +1,164 @@
+import sys
+sys.path.append("{{ pyltc_git_checkout }}")
+
+import signal
+import socket
+import time
+from tc_map import tc_map
+import test_config as config
+
+from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import WebDriverException
+
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+from pyltc.core.facade import TrafficControl
+
+global_pause = False
+
+def setup_signal_handlers(exit_callback = None, global_pause_callback = None):
+  def exit_signal_handler(signal, frame):
+    print("Cleaning up...")
+    exit_callback and exit_callback()
+    clear_traffic_shaping()
+    sys.exit(0)
+  signal.signal(signal.SIGINT, exit_signal_handler)
+  def global_pause_signal_handler(signal, frame):
+    global global_pause
+    print("Pausing...")
+    global_pause = not global_pause
+    global_pause_callback and global_pause_callback(global_pause)
+  signal.signal(signal.SIGUSR1, global_pause_signal_handler)
+
+# Setup.
+def shape_traffic(hostname):
+  if config.shape_traffic:
+    print("Searching for traffic shaping profile for host %s" % hostname)
+    if "profile" in tc_map[hostname]:
+      profile = tc_map[hostname]["profile"]
+      print("Applying traffic shaping profile %s to host %s" % (profile, hostname))
+      TrafficControl.init()
+      simnet = TrafficControl.get_plugin('simnet')
+      simnet.configure(interface='{{ public_eth_device }}')
+      simnet.load_profile(profile)
+      simnet.marshal()
+  else:
+    print("Skipping traffic shaping for host %s" % hostname)
+
+def clear_traffic_shaping():
+  TrafficControl.init()
+  print("Clearing any traffic shaping")
+  simnet = TrafficControl.get_plugin('simnet')
+  simnet.configure(clear=True, verbose=True, interface='{{ public_eth_device }}')
+  simnet.marshal()
+
+def setup_chrome():
+  chrome_options = Options()
+  # These options allow headless testing with a fake video device.
+  chrome_options.add_argument('--ignore-certificate-errors')
+  chrome_options.add_argument("--use-fake-ui-for-media-stream")
+  chrome_options.add_argument("--use-fake-device-for-media-stream")
+  chrome_options.add_argument("--use-file-for-fake-audio-capture=%s" % config.audio_filepath)
+  chrome_options.add_argument("--use-file-for-fake-video-capture=%s" % config.video_filepath)
+  return chrome_options
+
+def make_driver(options):
+  driver = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", chrome_options=options)
+  return driver
+
+def make_main_room_url(user_id):
+  url = "https://%s/event/%s?testUserId=%s&testAccessKey=%s" % (config.site_url, config.event_id, user_id, config.access_key)
+  print("Made event URL for user ID %s: %s" % (user_id, url))
+  return url
+
+# Breakouts.
+def manage_breakout(driver, session_id, mute=True):
+  dismiss_modal_dialogs(driver)
+  mute_buttons = driver.find_elements_by_id("mute-audio-local")
+  try:
+    if len(mute_buttons) > 0 and mute_buttons[0].is_displayed():
+      check_breakout_mute(driver, session_id, mute)
+      check_close_breakout(driver, session_id)
+    else:
+      try:
+        print("Joining session %d" % session_id);
+        driver.find_element_by_css_selector("#session-list div.session:nth-child(%d) .attend" % (session_id)).click()
+      except (StaleElementReferenceException, WebDriverException) as e:
+        print("Could not locate JOIN button for session %d" % (session_id))
+  except (StaleElementReferenceException, WebDriverException) as e:
+    print("No mute button found for session %d" % session_id);
+
+def check_breakout_mute(driver, session_id, mute=True):
+  if mute:
+    try:
+      print("Muting audio in session %d" % session_id);
+      mute_button = driver.find_element_by_css_selector("#mute-audio-local:not(.muted)")
+      time.sleep(config.page_wait_time)
+      mute_button.click()
+    except (StaleElementReferenceException, WebDriverException) as e:
+      print("Could not click mute button, or already muted in session %d" % session_id)
+
+def check_close_breakout(driver, session_id):
+  close_buttons = driver.find_elements_by_id("close-breakout-btn")
+  try:
+    if len(close_buttons) > 0 and close_buttons[0].is_displayed():
+      try:
+        print("Trying to close session %d" % session_id);
+        driver.find_element_by_css_selector("#close-breakout-btn.sessions-closed").click()
+      except (StaleElementReferenceException, WebDriverException) as e:
+        print("Sessions not closed")
+    else:
+      print("Not in session %d" % session_id);
+  except (StaleElementReferenceException, WebDriverException) as e:
+    print("No close button found for session %d" % session_id);
+
+# Main room.
+def manage_main_room(driver, mute=True):
+  dismiss_modal_dialogs(driver)
+  if locate_main_room_mute(driver):
+    check_main_room_mute(driver, mute)
+
+def wait_for_main_room_mute(driver):
+  while True:
+    if not global_pause:
+      dismiss_modal_dialogs(driver)
+      if locate_main_room_mute(driver):
+        if check_main_room_mute(driver):
+          return
+      else:
+        time.sleep(config.page_wait_time)
+    else:
+      time.sleep(config.page_wait_time)
+
+def locate_main_room_mute(driver):
+  mute_buttons = driver.find_elements_by_id("mute-btn")
+  if len(mute_buttons) > 0 and mute_buttons[0].is_displayed():
+    return True
+  else:
+    print("No mute button found for main room");
+    return False
+
+def check_main_room_mute(driver, mute=True):
+  if mute:
+    try:
+      print("Muting audio in main room");
+      mute_button = driver.find_element_by_css_selector("#mute-btn:not(.btn-danger)")
+      mute_button.click()
+      return True
+    except (StaleElementReferenceException, WebDriverException) as e:
+      print("Could not click mute button, or already muted main room")
+      return False
+
+def dismiss_modal_dialogs(driver):
+  dismiss_buttons = driver.find_elements_by_class_name('modal-dismiss-btn')
+  if len(dismiss_buttons) > 0:
+    for button in dismiss_buttons:
+      if button.is_displayed():
+        try:
+          print("Dismissing modal dialog");
+          button.click()
+        except (StaleElementReferenceException, WebDriverException) as e:
+          print("Could not dismiss modal dialog")
+
+# vi: ft=python

@@ -1,0 +1,55 @@
+# This file contains all variables that are referenced in other SLS files
+# which may be customized.
+#
+# NOTE: Do not customize the variables here! Do so in an appropriate pillar
+# or grain file, see Salt documentation for details: http://docs.saltstack.com
+
+# Server environment.
+{% set server_env = salt['grains.get']('server:env', 'development') -%}
+{% set server_type = salt['grains.get']('server:type', '') -%}
+{% set server_timezone = salt['pillar.get']('server:timezone', 'Etc/UTC') -%}
+
+# Network.
+# The server ID, set by the salt minion config file - must be edited there.
+{% set server_id = grains['id'] -%}
+{% set public_eth_device = salt['pillar.get']('server:network:device', None) or (server_type == 'vagrant' and 'enp0s3' or 'eth0') %}
+
+# SSH.
+# Port to run the SSH daemon on.
+{% set sshd_port = salt['pillar.get']('service:sshd:port', 22) -%}
+# SSH pubkeys to insert for the root user. See pillar/server/ examples.
+{% set ssh_pubkeys_root = salt['pillar.get']('ssh:pubkeys:root', {}) -%}
+
+# Network.
+{% set host_entries = salt['pillar.get']('server:network:host_entries', []) -%}
+
+# Test user.
+{% set test_user_password = salt['pillar.get']('server:user:test:password', 'asdf;lkj') -%}
+# Generate this from the above plain text password using 'openssl passwd -1'
+{% set test_user_password_hashed = salt['pillar.get']('server:user:test:password_hashed', '$1$c44aQcjA$CWraKH3YzSP.KaXDWn7460') -%}
+
+# Test settings.
+{% set server_test_access_key = salt['pillar.get']('server:test:access_key', 'supersecret') -%}
+
+# Alerts.
+# https://sendgrid.com
+# Leave empty to disable
+{% set sendgrid_api_key = salt['pillar.get']('server:alerts:sendgrid:api_key', '') -%}
+# Emails that server alerts should be sent to.
+{% set server_alert_emails = salt['pillar.get']('server:alerts:emails', []) -%}
+# Any time expression accepted by the 'sleep' command.
+{% set alert_running_too_long_timeout = salt['pillar.get']('server:alerts:running_too_long_timeout', '3h') -%}
+
+# Browsermob Proxy.
+# NOTE: This functionality not installed by default, see top.sls to enable.
+{% set browsermob_proxy_version = salt['pillar.get']('software:browsermob_proxy:version', '2.1.2') -%}
+{% set browsermob_proxy_archive_hash = salt['pillar.get']('software:browsermob_proxy:archive_hash', '7dd3ff2166e75b2365749837941c2b61') -%}
+{% set browsermob_proxy_port = salt['pillar.get']('software:browsermob_proxy:port', 8080) -%}
+
+# pyltc.
+# https://github.com/yassen-itlabs/py-linux-traffic-control
+{% set pyltc_git_checkout = salt['pillar.get']('software:pyltc:git:checkout', '/var/local/git/py-linux-traffic-control') -%}
+{% set pyltc_git_checkout_dependency = server_type == 'vagrant' and ('file: ' + pyltc_git_checkout) or ('git: pyltc-git-checkout') -%}
+{% set pyltc_git_branch = salt['grains.get']('software:pyltc:git:branch', 'master') -%}
+{% set pyltc_git_url = salt['pillar.get']('software:pyltc:git:url', 'https://github.com/yassen-itlabs/py-linux-traffic-control.git') -%}
+

@@ -1,0 +1,23 @@
+######################################################################################################################################################################################################
+#ACTION   SOURCE    DEST    PROTO DEST  SOURCE    ORIGINAL  RATE    USER/ MARK  CONNLIMIT TIME    HEADERS   SWITCH    HELPER
+#             PORT  PORT(S)   DEST    LIMIT   GROUP
+?SECTION ALL
+?SECTION ESTABLISHED
+?SECTION RELATED
+?SECTION INVALID
+?SECTION UNTRACKED
+?SECTION NEW
+
+Invalid(DROP) net   $FW     tcp
+
+ACCEPT    net       $FW     tcp   {{ sshd_port }}
+
+{% set ports = [
+  '5900',
+] -%}
+
+{% for port in ports -%}
+ACCEPT    net       $FW     tcp   {{ port }}
+{% endfor -%}
+
+Ping(ACCEPT)  net   $FW

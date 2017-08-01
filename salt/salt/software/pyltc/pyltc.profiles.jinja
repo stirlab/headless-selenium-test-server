@@ -1,0 +1,135 @@
+; Standard tests.
+[4g]
+clear
+verbose
+interface {{ public_eth_device }}
+upload
+  tcp:rport:443:512kbit
+  tcp:rport:8080:512kbit
+  tcp:rport:8082:512kbit
+  udp:rport:10000-35000:512kbit
+download
+  tcp:rport:443:2560kbit
+  tcp:rport:8080:2560kbit
+  tcp:rport:8082:2560kbit
+  udp:rport:10000-35000:2560kbit
+
+[4g-upload]
+clear
+verbose
+interface {{ public_eth_device }}
+upload
+  tcp:rport:443:512kbit
+  tcp:rport:8080:512kbit
+  tcp:rport:8082:512kbit
+  udp:rport:10000-35000:512kbit
+
+[4g-download]
+clear
+verbose
+interface {{ public_eth_device }}
+download
+  tcp:rport:443:2560kbit
+  tcp:rport:8080:2560kbit
+  tcp:rport:8082:2560kbit
+  udp:rport:10000-35000:2560kbit
+
+; CA-specific tests.
+[jayne]
+clear
+verbose
+interface {{ public_eth_device }}
+upload
+  tcp:rport:443:256kbit:1%
+  tcp:rport:8080:256kbit:1%
+  tcp:rport:8082:256kbit:1%
+  udp:rport:10000-35000:256kbit:1%
+download
+  tcp:rport:443:5mbit:1%
+  tcp:rport:8080:5mbit:1%
+  tcp:rport:8082:5mbit:1%
+  udp:rport:10000-35000:5mbit:1%
+
+[hangouts-minimum]
+clear
+verbose
+interface {{ public_eth_device }}
+upload
+  tcp:rport:443:300kbit:1%
+  tcp:rport:8080:300kbit:1%
+  tcp:rport:8082:300kbit:1%
+  udp:rport:10000-35000:300kbit:1%
+download
+  tcp:rport:443:2400kbit:1%
+  tcp:rport:8080:2400kbit:1%
+  tcp:rport:8082:2400kbit:1%
+  udp:rport:10000-35000:2400kbit:1%
+
+[dsl-poor]
+clear
+verbose
+interface {{ public_eth_device }}
+upload
+  tcp:rport:443:512kbit:1%
+  tcp:rport:8080:512kbit:1%
+  tcp:rport:8082:512kbit:1%
+  udp:rport:10000-35000:512kbit:1%
+download
+  tcp:rport:443:2mbit:1%
+  tcp:rport:8080:2mbit:1%
+  tcp:rport:8082:2mbit:1%
+  udp:rport:10000-35000:2mbit:1%
+
+[dsl-good]
+clear
+verbose
+interface {{ public_eth_device }}
+upload
+  tcp:rport:443:1mbit
+  tcp:rport:8080:1mbit
+  tcp:rport:8082:1mbit
+  udp:rport:10000-35000:1mbit
+download
+  tcp:rport:443:8mbit
+  tcp:rport:8080:8mbit
+  tcp:rport:8082:8mbit
+  udp:rport:10000-35000:8mbit
+
+[dsl-excellent]
+clear
+verbose
+interface {{ public_eth_device }}
+upload
+  tcp:rport:443:5mbit
+  tcp:rport:8080:5mbit
+  tcp:rport:8082:5mbit
+  udp:rport:10000-35000:5mbit
+download
+  tcp:rport:443:40mbit
+  tcp:rport:8080:40mbit
+  tcp:rport:8082:40mbit
+  udp:rport:10000-35000:40mbit
+
+; WebRTC tests.
+[kill-webrtc]
+clear
+verbose
+interface {{ public_eth_device }}
+upload
+  tcp:rport:3478:1kbit:100%
+  udp:rport:1024-65535:1kbit:100%
+
+[turn-test]
+clear
+verbose
+interface {{ public_eth_device }}
+upload
+  udp:rport:1024-65535:1kbit:100%
+
+; Clear the interface.
+[clear]
+clear
+verbose
+interface {{ public_eth_device }}
+
+; vi: ft=dosini

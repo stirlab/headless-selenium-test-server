@@ -1,5 +1,20 @@
 #!/usr/bin/env bash
 
+script=`basename "${0}"`
+
+usage() {
+
+  echo "
+Usage: ${script} <test_name>
+  test_name: Name of test to kill (leave off the '_test.py' extension).
+"
+}
+
+if [ $# -ne 1 ]; then
+  usage
+  exit 1
+fi
+
 test_name=${1}
 test_file=${test_name}_test.py
 

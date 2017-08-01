@@ -7,7 +7,7 @@ starting and stopping tests on multiple testing servers.
  1. Fork this repository.
  1. Install a base Linux server of your favorite flavor.
  1. Install the Salt master software onto the server, and use your fork's [salt](salt/salt) and [pillar](salt/pillar) configurations. You can use the provided [production/bootstrap-salt-master-server.sh](production/bootstrap-salt-master-server.sh) to perform a standard install.
- 1. Copy [salt/pillar/private.sls.example](salt/pillar/private.sls.example) to `salt/pillar/private.sls` and tweak to your liking.
+ 1. Copy [salt/pillar/server/private.sls.example](salt/pillar/server/private.sls.example) to `salt/pillar/private.sls` and tweak to your liking.
  1. Tweak [salt/pillar/production.sls](salt/pillar/production.sls) to your liking.
 
 ## Testing servers

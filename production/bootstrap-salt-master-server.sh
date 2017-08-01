@@ -25,7 +25,7 @@ git clone ${GIT_CLONE_URL}
 
 echo "Configuring Salt..."
 mkdir -p /srv && cd /srv && ln -s ${FULL_INSTALL_PATH}/salt
-cd /tmp && wget -O install_salt.sh https://bootstrap.saltstack.com && sh install_salt.sh -M git ${SALT_GIT_TAG} && rm install_salt.sh
+cd /tmp && wget -O install_salt.sh https://bootstrap.saltstack.com && sh install_salt.sh -M -N git ${SALT_GIT_TAG} && rm install_salt.sh
 cp ${FULL_INSTALL_PATH}/production/salt/master /etc/salt/
 systemctl restart salt-master.service
 

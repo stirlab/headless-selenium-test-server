@@ -1,7 +1,4 @@
-id: ###SALT_MASTER_ID###
 log_level: info
-
-state_auto_order: True
 
 file_roots:
   base:

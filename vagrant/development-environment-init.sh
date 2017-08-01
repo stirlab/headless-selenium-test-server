@@ -6,7 +6,6 @@
 
 SSH_PORT="2222"
 SSH_CONFIG_LABEL="headless-selenium-test-server"
-VM_INSTALL_DIR="${HOME}/vagrant/headless-selenium-test-server"
 MESSAGE_STORE=""
 
 SCRIPT_NAME=`basename $0`

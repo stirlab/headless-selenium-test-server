@@ -7,7 +7,9 @@ the [Selenium](http://www.seleniumhq.org) browser automation tool.
 The repository as released provides the exact functionality used by its lead
 developer for testing a [WebRTC](https://webrtc.org) application powered by
 [FreeSWITCH](https://freeswitch.org) and
-[Janus](https://janus.conf.meetecho.com).
+[Janus](https://janus.conf.meetecho.com). You can see some examples of the
+tool in action [here](https://www.youtube.com/watch?v=V4PBWXKi-WQ) and
+[here](https://www.youtube.com/watch?v=km6a8DVsKUA).
 
 It is meant to be forked as a starting point for others with similar needs.
 

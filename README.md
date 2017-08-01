@@ -34,7 +34,7 @@ staring and stopping tests on multiple testing servers.
 
 1. Fork this repository.
 1. Install a base Linux server of your favorite flavor.
-1. Install the Salt master software onto the server, and use your fork's [salt](salt/salt) and [pillar](salt/pillar) configurations. You can use the provided [production/bootstrap-salt-master.sh](production/bootstrap-salt-master.sh) to perform a standard install.
+1. Install the Salt master software onto the server, and use your fork's [salt](salt/salt) and [pillar](salt/pillar) configurations. You can use the provided [production/bootstrap-salt-master-server.sh](production/bootstrap-salt-master-server.sh) to perform a standard install.
 1. Copy [salt/pillar/private.sls.example](salt/pillar/private.sls.example) to `salt/pillar/private.sls` and tweak to your liking.
 1. Tweak [salt/pillar/production.sls](salt/pillar/production.sls) to your liking.
 
@@ -48,16 +48,35 @@ staring and stopping tests on multiple testing servers.
 
 ## Managing tests
 
-By default, the tests and supporting code at [salt/salt/custom/tests](salt/salt/custom/tests) is installed to `/home/test/tests` on all testing servers. The test running scripts discussed below depend on finding tests in this location, with the naming pattern `[name]_test.py`. To add/remove tests of your own, write Salt states that place your test files in `/home/test/tests` -- see [salt/salt/custom/tests/init.sls](salt/salt/custom/tests/init.sls) as an example of how to do this.
+By default, the tests and supporting code at
+[salt/salt/custom/tests](salt/salt/custom/tests) is installed to
+`/home/test/tests` on all testing servers. The test running scripts discussed
+below depend on finding tests in this location, with the naming pattern
+`[name]_test.py`. To add/remove tests of your own, write Salt states that
+place your test files in `/home/test/tests` -- see
+[salt/salt/custom/tests/init.sls](salt/salt/custom/tests/init.sls) as an
+example of how to do this.
 
-Currently only Python tests are available as examples, but tests in other languages should work fine as well, provided the correct Selenium driver for the language is installed.
+Currently only Python tests are available as examples, but tests in other
+languages should work fine as well, provided the correct Selenium driver for
+the language is installed.
 
 ## Running tests
 
 ### From a testing server
 
-The installed `run-test.sh`, `kill-test.sh`, and `pause-test.sh` scripts can be used to run, kill, and pause tests directly from a testing server. They are executed with one argument, the name of the test to run, leaving off the `_test.py` suffix. For example, to run `foo_test.py`, execute `run-test.sh foo`.
+The installed `run-test.sh`, `kill-test.sh`, and `pause-test.sh` scripts can
+be used to run, kill, and pause tests directly from a testing server. They are
+executed with one argument, the name of the test to run, leaving off the
+`_test.py` suffix. For example, to run `foo_test.py`, execute `run-test.sh foo`.
 
 ### From the master
 
-The [production/bootstrap-salt-master.sh](production/bootstrap-salt-master.sh) symlinks all scripts in [production/scripts] to `/usr/local/bin`. They provide a simple method to manage up to ten testing servers at once, by executing the individual test management script on multiple test servers. Edit the `SERVER_NAME_TEMPLATE` variable at the top of each script to match the naming pattern of the minion IDs on your testing servers, and run the script without arguments for usage instructions.
+The [production/bootstrap-salt-master-server.sh](production/bootstrap-salt-master-server.sh)
+script symlinks all scripts in [production/scripts] to `/usr/local/bin`. They
+provide a simple method to manage up to ten testing servers at once, by
+executing the individual test management script on multiple test servers. Edit
+the `SERVER_NAME_TEMPLATE` variable at the top of each script to match the
+naming pattern of the minion IDs on your testing servers, and run the script
+without arguments for usage instructions.
+

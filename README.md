@@ -1,4 +1,4 @@
-# Overview
+## Overview
 
 This project provides a [Salt](https://docs.saltstack.com) configuration and
 supporting scripts to build out a group of headless testing servers leveraging
@@ -11,7 +11,8 @@ developer for testing a [WebRTC](https://webrtc.org) application powered by
 
 It is meant to be forked as a starting point for others with similar needs.
 
-# Key features
+
+## Key features
 
  * Full end user environment through [Google Chrome](https://www.google.com/chrome) automation.
  * Example [Selenium](http://www.seleniumhq.org) tests written in Python.
@@ -20,30 +21,14 @@ It is meant to be forked as a starting point for others with similar needs.
  * Automated setup of many standard server components (firewall, network, users, etc.).
  * Local developemnt of the testing server itself via [Vagrant](https://www.vagrantup.com).
 
-# Installation
+
+## Installation
 
 Some familiarity with the [Salt](https://docs.saltstack.com) server
 configuration tool and shell scripting is required to get the most out of this
 project.
 
-## Salt master
-
-The master server holds the Salt configuration for the testing servers, and
-must be reachable by them over the network. It can also be used to manage
-staring and stopping tests on multiple testing servers.
-
-1. Fork this repository.
-1. Install a base Linux server of your favorite flavor.
-1. Install the Salt master software onto the server, and use your fork's [salt](salt/salt) and [pillar](salt/pillar) configurations. You can use the provided [production/bootstrap-salt-master-server.sh](production/bootstrap-salt-master-server.sh) to perform a standard install.
-1. Copy [salt/pillar/private.sls.example](salt/pillar/private.sls.example) to `salt/pillar/private.sls` and tweak to your liking.
-1. Tweak [salt/pillar/production.sls](salt/pillar/production.sls) to your liking.
-
-## Testing servers
-
-1. Ensure the Salt master server is installed and running.
-1. Install a base Linux server using the [Ubuntu Xenial LTS](http://releases.ubuntu.com/16.04) release *(other Linux flavors/releases could be used in theory, and would most likely require adjustment to the provided Salt configuration)*.
-1. Copy [production/bootstrap-test-server.sh](production/bootstrap-test-server.sh) to the server.
-1. Execute without arguments and follow the instructions.
+See [INSTALL.md](INSTALL.md) for details.
 
 
 ## Managing tests
@@ -61,6 +46,12 @@ Currently only Python tests are available as examples, but tests in other
 languages should work fine as well, provided the correct Selenium driver for
 the language is installed.
 
+Some generally useful testing helpers can be found in
+[salt/salt/custom/tests/test_common.py.jinja](salt/salt/custom/tests/test_common.py.jinja),
+including those related to traffic shaping via
+[PyLTC](https://github.com/yassen-itlabs/py-linux-traffic-control)
+
+
 ## Running tests
 
 ### From a testing server
@@ -73,10 +64,20 @@ executed with one argument, the name of the test to run, leaving off the
 ### From the master
 
 The [production/bootstrap-salt-master-server.sh](production/bootstrap-salt-master-server.sh)
-script symlinks all scripts in [production/scripts] to `/usr/local/bin`. They
+script symlinks all scripts in [production/scripts](production/scripts) to `/usr/local/bin`. They
 provide a simple method to manage up to ten testing servers at once, by
 executing the individual test management script on multiple test servers. Edit
 the `SERVER_NAME_TEMPLATE` variable at the top of each script to match the
 naming pattern of the minion IDs on your testing servers, and run the script
 without arguments for usage instructions.
+
+
+## Miscellaneous
+
+ * Everything under the [salt/salt/custom](salt/salt/custom) directory are resources specifically used by the lead developer in their testing environment. They are included in the repository for convenience, and can be used or removed as needed without compromising the overall functionality of the server.
+
+
+## Support
+
+The issue tracker for this project is provided to file bug reports, feature requests, and project tasks -- support requests are not accepted via the issue tracker. For all support-related issues, including configuration, usage, and training, consider hiring a competent consultant.
 

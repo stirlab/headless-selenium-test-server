@@ -21,3 +21,6 @@ VM_INSTALL_DIR="/usr/local/vagrant/stirlab-webrtc-test-server"
 # The port on the host to use for connecting to the VM's SSH daemon.
 SSH_PORT="2246"
 
+SSH_CONFIG_LABEL="stirlab-webrtc-test-server"
+
+SALT_MINION_ID="webrtc-test.stirlab.local"

@@ -3,11 +3,10 @@
 # Handles all details of setting up the development virtual server.
 
 VAGRANT_CONFIG_DIR=$1
-VM_INSTALL_DIR="${HOME}/vagrant/stirlab-webrtc-test-server"
+VM_INSTALL_DIR="${HOME}/vagrant/headless-selenium-test-server"
 SALT_DIR="`dirname $VAGRANT_CONFIG_DIR 2> /dev/null`/salt"
 VAGRANT_VM_BOX="ubuntu/xenial64"
-SALT_MINION_ID="webrtc-test.stirlab.local"
-ALLOW_VM_FILE_SYNC_TIME="yes"
+SALT_MINION_ID="test.local"
 SSH_PORT="2222"
 AUTOMATICALLY_MANAGE_HOST_ENTRIES="yes"
 PYLTC_GIT_DIR="${HOME}/git/py-linux-traffic-control"

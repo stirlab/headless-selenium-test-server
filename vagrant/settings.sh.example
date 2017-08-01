@@ -11,7 +11,7 @@
 
 # Install path for the virtual machine. Make sure that the user executing the
 # installation script has permissions to create this directory.
-#VM_INSTALL_DIR="${HOME}/vagrant/stirlab-webrtc-test-server"
+#VM_INSTALL_DIR="${HOME}/vagrant/headless-selenium-test-server"
 
 # Box name to use for the Vagrantfile, config.vm.box setting.
 #VAGRANT_VM_BOX="ubuntu/xenial64"
@@ -25,10 +25,13 @@
 #SSH_PORT="2222"
 
 # The label for the entry to be placed in .ssh/config.
-#SSH_CONFIG_LABEL="stirlab-webrtc-test-server"
+#SSH_CONFIG_LABEL="headless-selenium-test-server"
 
 # The minion ID to be used in /etc/salt/minion.
-#SALT_MINION_ID="webrtc-test.stirlab.local"
+#SALT_MINION_ID="test.local"
+
+# Location of the py-linux-traffic-control repository on the local machine.
+#PYLTC_GIT_DIR="${HOME}/git/py-linux-traffic-control"
 
 # If this is set to yes, then the vagrant-hostsupdater will be installed to
 # automatically manage adding/removing entries from /etc/hosts for the VM.

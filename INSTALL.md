@@ -16,3 +16,7 @@ starting and stopping tests on multiple testing servers.
  1. Install a base Linux server using the [Ubuntu Xenial LTS](http://releases.ubuntu.com/16.04) release *(other Linux flavors/releases could be used in theory, and would most likely require adjustment to the provided Salt configuration)*.
  1. Copy the [production/bootstrap-test-server.sh](production/bootstrap-test-server.sh) script to the server.
  1. Execute the script without arguments and follow the instructions.
+ 1. On a new installation, you'll need to log into the testing server once to enable auto-login:
+   * The default password can be found in [salt/salt/vars.jinja](salt/salt/vars.jinja), and is used for all logins described below.
+   * Use a VNC client to log into the server, port 5900.
+   * Log into the desktop.

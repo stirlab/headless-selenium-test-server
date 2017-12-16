@@ -77,6 +77,15 @@ include:
     - require:
       - file: /home/test/tests
 
+/home/test/tests/main_room_four_feeds_test.py:
+  file.managed:
+    - source: salt://custom/tests/main_room_four_feeds_test.py
+    - user: root
+    - group: root
+    - mode: 755
+    - require:
+      - file: /home/test/tests
+
 /home/test/tests/main_room_six_feeds_test.py:
   file.managed:
     - source: salt://custom/tests/main_room_six_feeds_test.py

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import signal
-import socket
 import sys
 import time
 from selenium.common.exceptions import WebDriverException
@@ -24,7 +23,7 @@ def exit_callback():
     print("No driver instance to close")
 common.setup_signal_handlers(exit_callback)
 
-hostname = socket.gethostname()
+hostname = common.hostname_slug()
 
 user_id_1 = None
 user_id_2 = None

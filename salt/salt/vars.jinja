@@ -15,7 +15,7 @@
 {% if server_type == 'vagrant' %}
   {% set public_eth_device = 'enp0s8' %}
 {% else %}
-  {% for device, ip in salt['grains.get']('ip4_interfaces') %}
+  {% for device, ip in salt['grains.get']('ip4_interfaces').iteritems() %}
     {% if device != 'lo' %}
       {% set public_eth_device = ip %}
     {% endif %}

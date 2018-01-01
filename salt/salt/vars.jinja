@@ -12,9 +12,8 @@
 # Network.
 # The server ID, set by the salt minion config file - must be edited there.
 {% set server_id = grains['id'] -%}
-{% if server_type == 'vagrant' %}
-  {% set public_eth_device = 'enp0s8' %}
-{% else %}
+{% set public_eth_device = 'enp0s8' %}
+{% if server_type != 'vagrant' %}
   {% for device, ip in salt['grains.get']('ip4_interfaces').iteritems() %}
     {% if device != 'lo' %}
       {% set public_eth_device = ip %}

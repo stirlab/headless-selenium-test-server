@@ -1,6 +1,7 @@
 import sys
 sys.path.append("{{ pyltc_git_checkout }}")
 
+import re
 import signal
 import socket
 import time
@@ -16,6 +17,14 @@ from selenium.webdriver.chrome.options import Options
 from pyltc.core.facade import TrafficControl
 
 global_pause = False
+
+def hostname_slug():
+  slug = re.sub(
+    r"^webrtc-test-.+-(base|[0-9])\.stirlab\.net$",
+    r"webrtc-test-\1.stirlab.net",
+    hostname
+  )
+  return slug
 
 def setup_signal_handlers(exit_callback = None, global_pause_callback = None):
   def exit_signal_handler(signal, frame):

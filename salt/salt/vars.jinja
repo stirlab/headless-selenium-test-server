@@ -12,14 +12,17 @@
 # Network.
 # The server ID, set by the salt minion config file - must be edited there.
 {% set server_id = grains['id'] -%}
-{% set public_eth_device = 'enp0s8' %}
-{% if server_type != 'vagrant' %}
+{% set device_list = [] -%}
+{% if server_type == 'vagrant' %}
+  {% if device_list.append('enp0s8') %}{% endif -%}
+{% else %}
   {% for device, ip in salt['grains.get']('ip4_interfaces').iteritems() %}
     {% if device != 'lo' %}
-      {% set public_eth_device = ip %}
+      {% if device_list.append(ip) %}{% endif -%}
     {% endif %}
   {% endfor %}
 {% endif %}
+{% set public_eth_device = salt['pillar.get']('server:network:device', device_list[0]) %}
 
 # SSH.
 # Port to run the SSH daemon on.

@@ -6,6 +6,7 @@ base:
     - service.firewall
     - service.network
     - auth.root
+    - auth.root.dotfiles
     - auth.test
     - service.ssh
     - misc

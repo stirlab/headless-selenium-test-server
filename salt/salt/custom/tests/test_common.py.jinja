@@ -19,6 +19,7 @@ from pyltc.core.facade import TrafficControl
 global_pause = False
 
 def hostname_slug():
+  hostname = socket.gethostname()
   slug = re.sub(
     r"^webrtc-test-.+-(base|[0-9])\.stirlab\.net$",
     r"webrtc-test-\1.stirlab.net",

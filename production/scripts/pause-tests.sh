@@ -28,7 +28,7 @@ if [ $# -ne 3 ]; then
   exit 1
 fi
 
-for l in ${locations} do;
+for l in ${locations}; do
   if [ "${location}" = "${l}" ]; then
     valid_location=1
   fi

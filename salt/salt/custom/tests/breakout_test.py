@@ -13,8 +13,12 @@ def usage():
   print("Usage: %s" % sys.argv[0])
   print("Configuration variables set in test_config.py")
 
-if len(sys.argv) != 1:
+if len(sys.argv) > 2:
   usage()
+
+data = None
+if len(sys.argv) > 1:
+    data = sys.argv[1]
 
 def exit_callback():
   try:
@@ -36,7 +40,7 @@ else:
 options = common.setup_chrome()
 driver = common.make_driver(options)
 
-main_room_url = common.make_main_room_url(user_id)
+main_room_url = common.make_main_room_url(user_id, data)
 
 try:
   common.shape_traffic(hostname)

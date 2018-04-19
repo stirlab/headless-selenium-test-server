@@ -8,6 +8,7 @@ SERVER_NAME_TEMPLATE="webrtc-test-%s-[%s].stirlab.net"
 location="${1}"
 servers="${2}"
 test_name="${3}"
+test_data="${4}"
 script=`basename "${0}"`
 
 locations="cs-mia pb-las"
@@ -16,14 +17,15 @@ valid_location=0
 usage() {
 
   echo "
-Usage: ${script} <location> <servers> <test_name>
+Usage: ${script} <location> <servers> <test_name> [data]
   location: Location label, one of: ${locations}
   servers: Single server number (1) or range (1-5)
   test_name: Name of test to run
+  data: Optional comma-separated data to pass to the run-test.sh script.
 "
 }
 
-if [ $# -ne 3 ]; then
+if [ $# -lt 3 ] || [ $# -gt 4 ]; then
   usage
   exit 1
 fi
@@ -42,7 +44,7 @@ fi
 
 server_regex=`printf ${SERVER_NAME_TEMPLATE} "${location}" "${servers}"`
 
-salt -E "${server_regex}" cmd.run "/usr/local/bin/run-test.sh ${test_name}"
+salt -E "${server_regex}" cmd.run "/usr/local/bin/run-test.sh ${test_name} ${test_data}"
 
 exit $?
 

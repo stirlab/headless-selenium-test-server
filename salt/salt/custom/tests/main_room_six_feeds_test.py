@@ -12,8 +12,12 @@ def usage():
   print("Usage: %s" % sys.argv[0])
   print("Configuration variables set in test_config.py")
 
-if len(sys.argv) != 1:
+if len(sys.argv) > 2:
   usage()
+
+data = None
+if len(sys.argv) > 1:
+    data = sys.argv[1]
 
 def exit_callback():
   try:
@@ -54,12 +58,12 @@ driver4 = common.make_driver(options)
 driver5 = common.make_driver(options)
 driver6 = common.make_driver(options)
 
-main_room_url_1 = common.make_main_room_url(user_id_1)
-main_room_url_2 = common.make_main_room_url(user_id_2)
-main_room_url_3 = common.make_main_room_url(user_id_3)
-main_room_url_4 = common.make_main_room_url(user_id_4)
-main_room_url_5 = common.make_main_room_url(user_id_5)
-main_room_url_6 = common.make_main_room_url(user_id_6)
+main_room_url_1 = common.make_main_room_url(user_id_1, data)
+main_room_url_2 = common.make_main_room_url(user_id_2, data)
+main_room_url_3 = common.make_main_room_url(user_id_3, data)
+main_room_url_4 = common.make_main_room_url(user_id_4, data)
+main_room_url_5 = common.make_main_room_url(user_id_5, data)
+main_room_url_6 = common.make_main_room_url(user_id_6, data)
 
 try:
   common.shape_traffic(hostname)

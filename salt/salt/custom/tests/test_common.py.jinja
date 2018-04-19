@@ -16,6 +16,9 @@ from selenium.webdriver.chrome.options import Options
 
 from pyltc.core.facade import TrafficControl
 
+import collections
+TestData = collections.namedtuple('TestData', ['event_id', 'site_hostname'])
+
 global_pause = False
 
 def hostname_slug():
@@ -77,8 +80,25 @@ def make_driver(options):
   driver = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", chrome_options=options)
   return driver
 
-def make_main_room_url(user_id):
-  url = "https://%s/event/%s?testUserId=%s&testAccessKey=%s" % (config.site_url, config.event_id, user_id, config.access_key)
+def parse_test_data(data):
+  if data:
+    args = data.split(',')
+    if len(args) == 1:
+      event_id = args[0]
+      site_hostname = None
+    if len(args) == 2:
+      event_id = args[0]
+      site_hostname = args[1]
+  else:
+    event_id = None
+    site_hostname = None
+  return TestData(event_id=event_id, site_hostname=site_hostname)
+
+def make_main_room_url(user_id, data=None):
+  test_data = parse_test_data(data)
+  site_hostname = test_data.site_hostname or config.site_hostname
+  event_id = test_data.event_id or config.event_id
+  url = "https://%s/event/%s?testUserId=%s&testAccessKey=%s" % (site_hostname, event_id, user_id, config.access_key)
   print("Made event URL for user ID %s: %s" % (user_id, url))
   return url
 

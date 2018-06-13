@@ -10,7 +10,7 @@ servers="${2}"
 test_name="${3}"
 script=`basename "${0}"`
 
-locations="cs-mia pb-las"
+locations="cs-wdc"
 valid_location=0
 
 usage() {

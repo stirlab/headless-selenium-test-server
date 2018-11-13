@@ -1,4 +1,4 @@
-base:
+test-server:
   'server:group:test-server':
     - match: grain
     - server.common

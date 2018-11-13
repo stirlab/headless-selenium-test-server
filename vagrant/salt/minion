@@ -15,5 +15,6 @@ grains:
   server:
     env: development
     type: vagrant
+    group: test-server
 
 # vi: ft=yaml

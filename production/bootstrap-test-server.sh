@@ -3,7 +3,7 @@
 # Bootstraps the repository and installs Salt.
 
 PROJECT_NAME="headless-selenium-test-server"
-SALT_GIT_TAG="v2017.7.0"
+SALT_GIT_TAG="v2017.7.3"
 
 echo -n "Enter the host name for this server: "
 read HOSTNAME
@@ -14,7 +14,7 @@ read SALT_MASTER_HOSTNAME
 apt-get update
 apt-get -y install git
 cd /tmp/
-git clone https://github.com/thehunmonkgroup/${PROJECT_NAME}.git
+git clone https://github.com/stirlab/${PROJECT_NAME}.git
 cd && wget -O install_salt.sh https://bootstrap.saltstack.com && sh install_salt.sh -X -d git ${SALT_GIT_TAG} && systemctl stop salt-minion.service
 rm install_salt.sh
 cp /tmp/${PROJECT_NAME}/production/salt/minion /etc/salt/

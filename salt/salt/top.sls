@@ -1,5 +1,6 @@
 base:
-  '*':
+  'server:group:test-server':
+    - match: grain
     - early-packages
     - update-packages
     - base-packages

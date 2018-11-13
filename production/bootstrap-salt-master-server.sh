@@ -2,7 +2,7 @@
 
 # Bootstraps the Salt master server.
 
-SALT_GIT_TAG="v2017.7.0"
+SALT_GIT_TAG="v2017.7.3"
 PROJECT_NAME="headless-selenium-test-server"
 INSTALL_DIR="/var/local/git"
 FULL_INSTALL_PATH="${INSTALL_DIR}/${PROJECT_NAME}"
